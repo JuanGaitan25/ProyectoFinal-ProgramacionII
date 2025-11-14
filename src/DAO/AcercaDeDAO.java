@@ -4,10 +4,17 @@
  */
 package DAO;
 
+import MODELO.AcercaDe;
+import java.util.List;
+
 /**
  *
  * @author juangaitan
  */
 public interface AcercaDeDAO {
+    boolean insertar(AcercaDe acercaDe);
+    boolean actualizar(AcercaDe acercaDe);
+    List<AcercaDe> listar();
+    AcercaDe obtenerPorId(int id);
     
 }
