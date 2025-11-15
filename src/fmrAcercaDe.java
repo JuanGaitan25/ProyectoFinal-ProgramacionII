@@ -3,6 +3,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 
+import SERVICIO.AcercaDeServicio;
+import MODELO.AcercaDe;
+import java.awt.Image;
+import java.io.File;
+import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author juangaitan
@@ -11,12 +19,53 @@ public class fmrAcercaDe extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(fmrAcercaDe.class.getName());
 
+    
+    private final AcercaDeServicio service = new AcercaDeServicio();
+    
     /**
      * Creates new form fmrAcercaDe
      */
     public fmrAcercaDe() {
         initComponents();
+        cargarDatos();
     }
+    
+    private void cargarDatos() {
+    try {
+            AcercaDe info = service.obtener(0);
+
+            if (info != null) {
+                txtID.setText(info.getCarne());
+                txtNombre.setText(info.getNombres());
+                txtCarnet.setText(info.getNumeroCarne());
+                txtProyecto.setText(info.getProyecto());
+                txtVersion.setText(info.getVersion());
+                txtFecha.setText(info.getFecha());
+
+                String rutaFotoSeleccionada = info.getFotoPath();
+
+                if (rutaFotoSeleccionada != null && !rutaFotoSeleccionada.isBlank()) {
+                    mostrarImagen(rutaFotoSeleccionada);
+                }
+
+         }
+
+        } catch (Exception e) {
+            mostrarError(e);
+        }
+    }
+    
+    private void mostrarImagen(String path) {
+        ImageIcon icon = new ImageIcon(path);
+        Image img = icon.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
+        lblFoto.setIcon(new ImageIcon(img));
+        txtRuta.setText(path);
+    }
+    
+    private void mostrarError(Exception e) {
+        JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -43,6 +92,9 @@ public class fmrAcercaDe extends javax.swing.JFrame {
         txtFecha = new javax.swing.JTextField();
         lblFoto = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
+        btnActualizar = new javax.swing.JButton();
+        btnCargarFoto = new javax.swing.JButton();
+        txtRuta = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -61,7 +113,7 @@ public class fmrAcercaDe extends javax.swing.JFrame {
 
         jLabel7.setText("Fecha:");
 
-        jLabel8.setText("F:oto");
+        jLabel8.setText("Foto:");
 
         jButton1.setText("Menu");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -70,10 +122,32 @@ public class fmrAcercaDe extends javax.swing.JFrame {
             }
         });
 
+        btnActualizar.setText("Actualizar");
+        btnActualizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActualizarActionPerformed(evt);
+            }
+        });
+
+        btnCargarFoto.setText("Cargar Foto");
+        btnCargarFoto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCargarFotoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(86, 86, 86)
+                .addComponent(jButton1)
+                .addGap(53, 53, 53)
+                .addComponent(btnCargarFoto, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
+                .addComponent(btnActualizar)
+                .addGap(41, 41, 41))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -84,26 +158,27 @@ public class fmrAcercaDe extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(143, 143, 143)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel8)
                                     .addComponent(jLabel3)
                                     .addComponent(jLabel2)
                                     .addComponent(jLabel4)
                                     .addComponent(jLabel5)
                                     .addComponent(jLabel6)
                                     .addComponent(jLabel7)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(21, 21, 21)
-                                .addComponent(jButton1)))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jLabel8)))
                         .addGap(33, 33, 33)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtID)
-                            .addComponent(txtCarnet)
-                            .addComponent(txtNombre)
-                            .addComponent(txtProyecto, javax.swing.GroupLayout.DEFAULT_SIZE, 206, Short.MAX_VALUE)
-                            .addComponent(txtVersion)
-                            .addComponent(txtFecha, javax.swing.GroupLayout.DEFAULT_SIZE, 206, Short.MAX_VALUE)
-                            .addComponent(lblFoto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addGap(19, 186, Short.MAX_VALUE))
+                            .addComponent(txtRuta, javax.swing.GroupLayout.DEFAULT_SIZE, 206, Short.MAX_VALUE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(txtID)
+                                .addComponent(txtCarnet)
+                                .addComponent(txtNombre)
+                                .addComponent(txtProyecto, javax.swing.GroupLayout.DEFAULT_SIZE, 206, Short.MAX_VALUE)
+                                .addComponent(txtVersion)
+                                .addComponent(txtFecha, javax.swing.GroupLayout.DEFAULT_SIZE, 206, Short.MAX_VALUE)
+                                .addComponent(lblFoto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -112,8 +187,8 @@ public class fmrAcercaDe extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(txtID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2))
                 .addGap(14, 14, 14)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtCarnet, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -122,7 +197,7 @@ public class fmrAcercaDe extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(29, 29, 29)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtProyecto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5))
@@ -134,16 +209,21 @@ public class fmrAcercaDe extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel7))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel8)
-                            .addComponent(lblFoto, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(29, 29, 29))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jButton1)
-                        .addGap(19, 19, 19))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(32, 32, 32)
+                        .addComponent(lblFoto, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(90, 90, 90)
+                        .addComponent(jLabel8)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(txtRuta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnCargarFoto)
+                    .addComponent(btnActualizar)
+                    .addComponent(jButton1))
+                .addGap(33, 33, 33))
         );
 
         pack();
@@ -154,6 +234,33 @@ public class fmrAcercaDe extends javax.swing.JFrame {
         menu.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void btnCargarFotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCargarFotoActionPerformed
+        JFileChooser chooser = new JFileChooser();
+    chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+
+    int res = chooser.showOpenDialog(this);
+
+    if (res == JFileChooser.APPROVE_OPTION) {
+        File archivo = chooser.getSelectedFile();
+        String rutaFotoSeleccionada = archivo.getAbsolutePath();
+        mostrarImagen(rutaFotoSeleccionada);
+    }
+    }//GEN-LAST:event_btnCargarFotoActionPerformed
+
+    private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
+        try {
+        AcercaDe info = new AcercaDe();
+        
+
+        service.actualizar(0, txtID.getText().trim(), txtNombre.getText().trim(), txtCarnet.getText().trim(),txtProyecto.getText().trim(),txtVersion.getText().trim(),txtFecha.getText().trim(), txtRuta.getText().trim());
+
+        JOptionPane.showMessageDialog(this, "Información actualizada.");
+
+    } catch (Exception e) {
+        mostrarError(e);
+    }
+    }//GEN-LAST:event_btnActualizarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -181,6 +288,8 @@ public class fmrAcercaDe extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnActualizar;
+    private javax.swing.JButton btnCargarFoto;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -196,6 +305,7 @@ public class fmrAcercaDe extends javax.swing.JFrame {
     private javax.swing.JTextField txtID;
     private javax.swing.JTextField txtNombre;
     private javax.swing.JTextField txtProyecto;
+    private javax.swing.JTextField txtRuta;
     private javax.swing.JTextField txtVersion;
     // End of variables declaration//GEN-END:variables
 }
