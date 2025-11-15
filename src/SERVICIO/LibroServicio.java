@@ -20,8 +20,9 @@ public class LibroServicio {
     private final LibroDAO dao = new LibroDAOImpl();
     private final AutorServicio autorService = new AutorServicio();
     private final CategoriaServicio categoriaService = new CategoriaServicio();
+    
 
-    public void guardarNuevo(int id, String titulo, int autorId, int categoriaId, int anio, int stock) throws Exception {
+    public void guardarNuevo(int id, String titulo, int autorId, int categoriaId, int anio, int stock, boolean favorito) throws Exception {
 
         if (titulo.isBlank()) throw new IllegalArgumentException("Título requerido");
 
@@ -32,9 +33,12 @@ public class LibroServicio {
         if (c == null) throw new Exception("La categoría no existe");
 
         dao.insertar(new Libro(id, titulo, autorId, categoriaId, anio, stock));
+        
+        
+        marcarFavorito(id, favorito);
     }
 
-    public void actualizar(int id, String titulo, int autorId, int categoriaId, int anio, int stock) throws Exception {
+    public void actualizar(int id, String titulo, int autorId, int categoriaId, int anio, int stock, boolean favorito) throws Exception {
 
         Autor a = autorService.obtenerPorId(autorId);
         Categoria c = categoriaService.obtenerPorId(categoriaId);
@@ -43,6 +47,9 @@ public class LibroServicio {
         if (c == null) throw new Exception("La categoría no existe");
 
         dao.actualizar(new Libro(id, titulo, autorId, categoriaId, anio, stock));
+        
+        
+        marcarFavorito(id, favorito);
     }
 
     public void eliminar(int id) throws Exception {
@@ -59,5 +66,13 @@ public class LibroServicio {
 
     public List<Libro> buscarPorTitulo(String texto) throws Exception {
         return dao.buscarPorTitulo(texto);
+    }
+    
+    public void marcarFavorito(int idLibro, boolean favorito) throws Exception {
+        dao.marcarFavorito(idLibro, favorito);
+    }
+
+    public List<Libro> listarFavoritos() throws Exception {
+        return dao.listarFavoritos();
     }
 }

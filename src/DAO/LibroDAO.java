@@ -18,4 +18,6 @@ public interface LibroDAO {
     List<Libro> listar();
     Libro obtenerPorId(int id);
     List<Libro> buscarPorTitulo(String titulo);
+    void marcarFavorito(int idLibro, boolean favorito) throws Exception;
+    List<Libro> listarFavoritos() throws Exception;
 }

@@ -15,6 +15,7 @@ public class Libro {
     private int categoriaId;
     private int anio;
     private int stock;
+    private boolean favorito;
 
     public Libro() {
     }
@@ -26,6 +27,14 @@ public class Libro {
         this.categoriaId = categoriaId;
         this.anio = anio;
         this.stock = stock;
+    }
+
+    public boolean isFavorito() {
+        return favorito;
+    }
+
+    public void setFavorito(boolean favorito) {
+        this.favorito = favorito;
     }
     
     public int getId() {

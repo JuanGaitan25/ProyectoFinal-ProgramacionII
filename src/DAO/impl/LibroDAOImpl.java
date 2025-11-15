@@ -155,4 +155,50 @@ public class LibroDAOImpl implements LibroDAO {
         }
         return lista;
     }
+    
+    @Override
+    public void marcarFavorito(int idLibro, boolean favorito) throws Exception {
+        String sql = "UPDATE libros SET favorito = ? WHERE id = ?";
+        try (Connection cn = Conexion.getConnection();
+             PreparedStatement ps = cn.prepareStatement(sql)) {
+
+            ps.setBoolean(1, favorito);
+            ps.setInt(2, idLibro);
+            ps.executeUpdate();
+        }
+    }
+    
+    @Override
+    public List<Libro> listarFavoritos() throws Exception {
+        List<Libro> lista = new ArrayList<>();
+        String sql = """
+                SELECT l.id, l.titulo, a.nombre AS autor, c.nombre AS categoria, l.anio, l.stock,
+                       l.autor_id, l.categoria_id
+                FROM libros l
+                INNER JOIN autores a ON l.autor_id = a.id
+                INNER JOIN categorias c ON l.categoria_id = c.id
+                WHERE favorito = 1
+                """;
+        try (Connection conn = Conexion.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                Libro libro = new Libro();
+                libro.setId(rs.getInt("id"));
+                libro.setTitulo(rs.getString("titulo"));
+                libro.setAutorId(rs.getInt("autor_id"));
+                libro.setCategoriaId(rs.getInt("categoria_id"));
+                libro.setAnio(rs.getInt("anio"));
+                libro.setStock(rs.getInt("stock"));
+                lista.add(libro);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error listando libros: " + e.getMessage());
+        }
+        return lista;
+    }
+    
+    
 }
