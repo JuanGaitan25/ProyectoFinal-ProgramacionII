@@ -174,6 +174,7 @@ public class fmrLibros extends javax.swing.JFrame {
         STOCK = new javax.swing.JLabel();
         txtAnio = new javax.swing.JTextField();
         txtStock = new javax.swing.JTextField();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -239,6 +240,13 @@ public class fmrLibros extends javax.swing.JFrame {
 
         STOCK.setText("STOCK");
 
+        jButton1.setText("Mneu");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -288,6 +296,10 @@ public class fmrLibros extends javax.swing.JFrame {
                         .addGap(146, 146, 146)
                         .addComponent(jLabel5)))
                 .addContainerGap(106, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(22, 22, 22)
+                .addComponent(jButton1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -334,7 +346,9 @@ public class fmrLibros extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnEliminar)
                             .addComponent(btnListar))
-                        .addGap(96, 96, 96))))
+                        .addGap(57, 57, 57)
+                        .addComponent(jButton1)
+                        .addGap(16, 16, 16))))
         );
 
         pack();
@@ -376,9 +390,11 @@ public class fmrLibros extends javax.swing.JFrame {
         } catch (Exception e) {
             mostrarError(e);
         }
-
     }              txtTitulo//GEN-LAST:event_btnGuardarActionPerformed
-
+ 
+            
+            
+            
     private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
          try {
             if (txtId.getText().isEmpty()) {
@@ -441,6 +457,12 @@ public class fmrLibros extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnListarActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        fmrMenu menu = new fmrMenu();
+        menu.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -475,6 +497,7 @@ public class fmrLibros extends javax.swing.JFrame {
     private javax.swing.JButton btnListar;
     private javax.swing.JComboBox<String> cboAutores;
     private javax.swing.JComboBox<String> cboCategorias;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
