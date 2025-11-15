@@ -32,7 +32,7 @@ public class fmrAcercaDe extends javax.swing.JFrame {
     
     private void cargarDatos() {
     try {
-            AcercaDe info = service.obtener(0);
+            AcercaDe info = service.obtener(1);
 
             if (info != null) {
                 txtID.setText(info.getCarne());
@@ -250,10 +250,8 @@ public class fmrAcercaDe extends javax.swing.JFrame {
 
     private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
         try {
-        AcercaDe info = new AcercaDe();
-        
 
-        service.actualizar(0, txtID.getText().trim(), txtNombre.getText().trim(), txtCarnet.getText().trim(),txtProyecto.getText().trim(),txtVersion.getText().trim(),txtFecha.getText().trim(), txtRuta.getText().trim());
+        service.actualizar(1, txtID.getText().trim(), txtNombre.getText().trim(), txtCarnet.getText().trim(),txtProyecto.getText().trim(),txtVersion.getText().trim(),txtFecha.getText().trim(), txtRuta.getText().trim());
 
         JOptionPane.showMessageDialog(this, "Información actualizada.");
 
