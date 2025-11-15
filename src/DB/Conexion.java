@@ -17,6 +17,6 @@ public class Conexion {
     private static final String PASS = "JnGtn2598"; 
 
     public static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(URL, USER, PASSWORD);
+        return DriverManager.getConnection(URL, USER, PASS);
     }
 }
