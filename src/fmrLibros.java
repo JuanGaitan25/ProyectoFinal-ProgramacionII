@@ -3,6 +3,17 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 
+import MODELO.Libro;
+import MODELO.Autor;
+import MODELO.Categoria;
+import SERVICIO.LibroServicio;
+import SERVICIO.AutorServicio;
+import SERVICIO.CategoriaServicio;
+import java.awt.HeadlessException;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author juangaitan
@@ -14,8 +25,124 @@ public class fmrLibros extends javax.swing.JFrame {
     /**
      * Creates new form fmrLibros
      */
+    
+    private final LibroServicio  service = new LibroServicio();
+    private final AutorServicio  autorService = new AutorServicio();
+    private final CategoriaServicio  categoriaService = new CategoriaServicio();
+    
+    private DefaultTableModel modelo;
+    
     public fmrLibros() {
         initComponents();
+        setLocationRelativeTo(null);
+        configurarTabla();
+        cargarTabla();
+        cargarAutores();
+        cargarCategorias();
+        
+        tblLibros.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting() && tblLibros.getSelectedRow() != -1) {
+
+                int fila = tblLibros.getSelectedRow();
+
+                txtId.setText(modelo.getValueAt(fila, 0).toString());
+                txtTitulo.setText(modelo.getValueAt(fila, 1).toString());
+
+
+                int autorId = Integer.parseInt(modelo.getValueAt(fila, 2).toString());
+                int categoriaId = Integer.parseInt(modelo.getValueAt(fila, 3).toString());
+
+                for (int i = 0; i < cboCategorias.getItemCount(); i++) {
+                    String item = (String) cboCategorias.getItemAt(i);
+                    String[] parts = item.split(" - ", 2);
+                    int idItem = Integer.parseInt(parts[0].trim());
+                    if (idItem == categoriaId) {
+                        cboCategorias.setSelectedIndex(i);
+                        break;
+                    }
+                }
+             
+
+                for (int i = 0; i < cboAutores.getItemCount(); i++) {
+                    String item = (String) cboAutores.getItemAt(i);
+                    String[] parts = item.split(" - ", 2);
+                    int idItem = Integer.parseInt(parts[0].trim());
+                    if (idItem == autorId) {
+                        cboAutores.setSelectedIndex(i);
+                        break;
+                    }
+                }
+
+
+            }
+        });
+    }
+    
+    private void cargarAutores() {
+        try {
+
+            List<Autor> autores = autorService.listar();
+
+            cboAutores.removeAllItems(); // Limpia el combo antes de llenarlo
+
+            for (Autor a : autores) {
+                cboAutores.addItem(a.getNombre()); 
+            }
+
+        } catch (Exception e) {
+            mostrarError(e);
+        }
+    }
+    
+    private void cargarCategorias() {
+        try {
+            List<Categoria> categorias = categoriaService.listar();
+
+            cboCategorias.removeAllItems();
+
+            for (Categoria c : categorias) {
+                cboCategorias.addItem(c.getNombre());
+            }
+
+        } catch (Exception e) {
+            mostrarError(e);
+    }
+}
+    
+    private void configurarTabla() {
+        modelo = new DefaultTableModel(new Object[]{"ID", "Titulo", "Autor_ID", "Categoria_ID", "Anio", "Stoc"}, 0) {
+            @Override public boolean isCellEditable(int r, int c) { return false; }
+        };
+        tblLibros.setModel(modelo);
+    }
+     
+    
+    private void limpiarFormulario() {
+        txtId.setText("");
+        txtTitulo.setText("");
+        cboAutores.setSelectedIndex(0);
+        cboCategorias.setSelectedIndex(0);
+        txtAnio.setText("");
+        txtStock.setText("");
+        tblLibros.clearSelection();
+        
+        
+    }
+     
+    private void cargarTabla() {
+        try {
+            modelo.setRowCount(0); // limpiar filas actuales
+            List<Libro> alumnos = service.listar();
+            for (Libro a : alumnos) {
+                modelo.addRow(new Object[]{a.getId(), a.getTitulo(), a.getAutorId(), a.getAnio(), a.getStock()});
+            }
+        } catch (Exception e) {
+            mostrarError(e);
+        }
+    }
+
+    private void mostrarError(Exception e) {
+        JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
     }
 
     /**
@@ -27,21 +154,292 @@ public class fmrLibros extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        txtId = new javax.swing.JTextField();
+        btnGuardar = new javax.swing.JButton();
+        txtTitulo = new javax.swing.JTextField();
+        btnActualizar = new javax.swing.JButton();
+        btnEliminar = new javax.swing.JButton();
+        btnListar = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblLibros = new javax.swing.JTable();
+        btnLimpiar = new javax.swing.JButton();
+        cboAutores = new javax.swing.JComboBox<>();
+        cboCategorias = new javax.swing.JComboBox<>();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        STOCK = new javax.swing.JLabel();
+        txtAnio = new javax.swing.JTextField();
+        txtStock = new javax.swing.JTextField();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        btnGuardar.setText("Guardar");
+        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarActionPerformed(evt);
+            }
+        });
+
+        btnActualizar.setText("Actualizar");
+        btnActualizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActualizarActionPerformed(evt);
+            }
+        });
+
+        btnEliminar.setText("Eliminar");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
+
+        btnListar.setText("Listar");
+        btnListar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnListarActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setText("ID");
+
+        jLabel2.setText("TITULO");
+
+        jLabel3.setText("AUTOR");
+
+        jLabel4.setText("CATEGORIA");
+
+        tblLibros.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(tblLibros);
+
+        btnLimpiar.setText("Limpiar Campos");
+
+        cboAutores.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        cboCategorias.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        jLabel5.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
+        jLabel5.setText("LIBROS");
+
+        jLabel6.setText("ANIO");
+
+        STOCK.setText("STOCK");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(btnLimpiar)
+                                    .addComponent(btnListar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(btnActualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(29, 29, 29))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(146, 146, 146)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(jLabel6)
+                                            .addComponent(STOCK))
+                                        .addGap(18, 18, 18)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(txtAnio, javax.swing.GroupLayout.DEFAULT_SIZE, 173, Short.MAX_VALUE)
+                                            .addComponent(txtStock)))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(117, 117, 117)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(jLabel1)
+                                            .addComponent(jLabel2)
+                                            .addComponent(jLabel3)
+                                            .addComponent(jLabel4))
+                                        .addGap(18, 18, 18)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(txtId)
+                                            .addComponent(txtTitulo)
+                                            .addComponent(cboAutores, 0, 173, Short.MAX_VALUE)
+                                            .addComponent(cboCategorias, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                .addGap(18, 18, Short.MAX_VALUE)))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(146, 146, 146)
+                        .addComponent(jLabel5)))
+                .addContainerGap(106, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(23, 23, 23)
+                .addComponent(jLabel5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(52, 52, 52))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel1))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel3)
+                            .addComponent(cboAutores, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel4)
+                            .addComponent(cboCategorias, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(txtAnio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(txtStock, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(STOCK)))
+                            .addComponent(jLabel6))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnLimpiar)
+                            .addComponent(btnGuardar))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnActualizar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnEliminar)
+                            .addComponent(btnListar))
+                        .addGap(96, 96, 96))))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+        try {
+            
+                int id      = Integer.parseInt(txtId.getText().trim());
+                String titulo = txtTitulo.getText().trim();
+                int anio = Integer.parseInt(txtAnio.getText().trim());
+                int stock = Integer.parseInt(txtStock.getText().trim());
+
+
+
+                Autor autor = (Autor) cboAutores.getSelectedItem();
+                Categoria categoria = (Categoria) cboCategorias.getSelectedItem();
+
+                if (autor == null || categoria == null) {
+                    JOptionPane.showMessageDialog(this, "Debes seleccionar un autor y una categoría.");
+                    return;
+                }
+
+                service.guardarNuevo(
+                        id,
+                        titulo,
+                        autor.getId(),
+                        categoria.getId(),
+                        anio,
+                        stock
+                );
+
+                cargarTabla();
+                limpiarFormulario();
+                JOptionPane.showMessageDialog(this, "Libro guardado correctamente.");
+
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, "Año y stock deben ser números.");
+        } catch (Exception e) {
+            mostrarError(e);
+        }
+
+    }              txtTitulo//GEN-LAST:event_btnGuardarActionPerformed
+
+    private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
+         try {
+            if (txtId.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Selecciona un libro de la tabla.");
+                return;
+            }
+
+            int id = Integer.parseInt(txtId.getText());
+            String titulo = txtTitulo.getText().trim();
+            int anio = Integer.parseInt(txtAnio.getText().trim());
+            int stock = Integer.parseInt(txtStock.getText().trim());
+
+            Autor autor = (Autor) cboAutores.getSelectedItem();
+            Categoria categoria = (Categoria) cboCategorias.getSelectedItem();
+
+            if (autor == null || categoria == null) {
+                JOptionPane.showMessageDialog(this, "Debes seleccionar autor y categoría.");
+                return;
+            }
+
+            service.actualizar(id, titulo, autor.getId(), categoria.getId(), anio,stock);
+
+            cargarTabla();
+            limpiarFormulario();
+            JOptionPane.showMessageDialog(this, "Libro actualizado correctamente.");
+
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Año y stock deben ser números.");
+        } catch (HeadlessException e) {
+            mostrarError(e);
+        } catch (Exception ex) {
+            System.getLogger(fmrLibros.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        }
+    }//GEN-LAST:event_btnActualizarActionPerformed
+
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        try {
+            if (txtId.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Selecciona un alumno para eliminar.");
+                return;
+            }
+
+            int id = Integer.parseInt(txtId.getText());
+            int confirmar = JOptionPane.showConfirmDialog(this, "¿Eliminar alumno seleccionado?", "Confirmar", JOptionPane.YES_NO_OPTION);
+            if (confirmar == JOptionPane.YES_OPTION) {
+                service.eliminar(id);
+                cargarTabla();
+                limpiarFormulario();
+                JOptionPane.showMessageDialog(this, "Alumno eliminado correctamente.");
+            }
+        } catch (Exception e) { mostrarError(e); }
+    }//GEN-LAST:event_btnEliminarActionPerformed
+
+    private void btnListarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListarActionPerformed
+        try {
+            cargarTabla();
+            JOptionPane.showMessageDialog(this, "Tabla actualizada correctamente.");
+        } catch (Exception e) {
+            mostrarError(e);
+        }
+    }//GEN-LAST:event_btnListarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -69,5 +467,25 @@ public class fmrLibros extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel STOCK;
+    private javax.swing.JButton btnActualizar;
+    private javax.swing.JButton btnEliminar;
+    private javax.swing.JButton btnGuardar;
+    private javax.swing.JButton btnLimpiar;
+    private javax.swing.JButton btnListar;
+    private javax.swing.JComboBox<String> cboAutores;
+    private javax.swing.JComboBox<String> cboCategorias;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable tblLibros;
+    private javax.swing.JTextField txtAnio;
+    private javax.swing.JTextField txtId;
+    private javax.swing.JTextField txtStock;
+    private javax.swing.JTextField txtTitulo;
     // End of variables declaration//GEN-END:variables
 }

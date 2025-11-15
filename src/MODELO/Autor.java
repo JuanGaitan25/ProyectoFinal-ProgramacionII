@@ -21,7 +21,7 @@ public class Autor {
         this.nombre = nombre;
         this.nacionalidad = nacionalidad;
     }
-
+    
     public int getId() {
         return id;
     }

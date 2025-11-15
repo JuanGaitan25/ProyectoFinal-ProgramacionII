@@ -15,41 +15,19 @@ public class Libro {
     private int categoriaId;
     private int anio;
     private int stock;
-    private String autorNombre;
-    private String categoriaNombre;
 
     public Libro() {
     }
 
-    public Libro(int id, String titulo, int autorId, int categoriaId, int anio, int stock, String autorNombre, String categoriaNombre) {
+    public Libro(int id, String titulo, int autorId, int categoriaId, int anio, int stock) {
         this.id = id;
         this.titulo = titulo;
         this.autorId = autorId;
         this.categoriaId = categoriaId;
         this.anio = anio;
         this.stock = stock;
-        this.autorNombre = autorNombre;
-        this.categoriaNombre = categoriaNombre;
     }
-
-    public String getAutorNombre() {
-        return autorNombre;
-    }
-
-    public void setAutorNombre(String autorNombre) {
-        this.autorNombre = autorNombre;
-    }
-
-    public String getCategoriaNombre() {
-        return categoriaNombre;
-    }
-
-    public void setCategoriaNombre(String categoriaNombre) {
-        this.categoriaNombre = categoriaNombre;
-    }
-
     
-
     public int getId() {
         return id;
     }

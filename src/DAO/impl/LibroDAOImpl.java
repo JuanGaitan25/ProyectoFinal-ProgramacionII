@@ -91,8 +91,6 @@ public class LibroDAOImpl implements LibroDAO {
                 libro.setCategoriaId(rs.getInt("categoria_id"));
                 libro.setAnio(rs.getInt("anio"));
                 libro.setStock(rs.getInt("stock"));
-                libro.setAutorNombre(rs.getString("autor"));
-                libro.setCategoriaNombre(rs.getString("categoria"));
                 lista.add(libro);
             }
 
@@ -149,8 +147,6 @@ public class LibroDAOImpl implements LibroDAO {
                 libro.setCategoriaId(rs.getInt("categoria_id"));
                 libro.setAnio(rs.getInt("anio"));
                 libro.setStock(rs.getInt("stock"));
-                libro.setAutorNombre(rs.getString("autor"));
-                libro.setCategoriaNombre(rs.getString("categoria"));
                 lista.add(libro);
             }
 
