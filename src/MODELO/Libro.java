@@ -29,6 +29,18 @@ public class Libro {
         this.stock = stock;
     }
 
+    public Libro(int id, String titulo, int autorId, int categoriaId, int anio, int stock, boolean favorito) {
+        this.id = id;
+        this.titulo = titulo;
+        this.autorId = autorId;
+        this.categoriaId = categoriaId;
+        this.anio = anio;
+        this.stock = stock;
+        this.favorito = favorito;
+    }
+    
+    
+
     public boolean isFavorito() {
         return favorito;
     }

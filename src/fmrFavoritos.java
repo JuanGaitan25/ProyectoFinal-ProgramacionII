@@ -37,7 +37,7 @@ public class fmrFavoritos extends javax.swing.JFrame {
     
     private void configurarTabla() {
         modelo = new DefaultTableModel(
-            new Object[]{"ID", "Titulo", "Autor_ID", "Categoria_ID", "Año", "Stock", "Favorito"},
+            new Object[]{"ID", "Titulo", "Año"},
             0
         ) {
             @Override public boolean isCellEditable(int r, int c) { return false; }

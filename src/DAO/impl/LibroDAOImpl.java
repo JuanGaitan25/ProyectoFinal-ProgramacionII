@@ -74,7 +74,7 @@ public class LibroDAOImpl implements LibroDAO {
         List<Libro> lista = new ArrayList<>();
         String sql = """
                 SELECT l.id, l.titulo, a.nombre AS autor, c.nombre AS categoria, l.anio, l.stock,
-                       l.autor_id, l.categoria_id
+                       l.autor_id, l.categoria_id, l.favorito
                 FROM libros l
                 INNER JOIN autores a ON l.autor_id = a.id
                 INNER JOIN categorias c ON l.categoria_id = c.id
@@ -91,6 +91,7 @@ public class LibroDAOImpl implements LibroDAO {
                 libro.setCategoriaId(rs.getInt("categoria_id"));
                 libro.setAnio(rs.getInt("anio"));
                 libro.setStock(rs.getInt("stock"));
+                libro.setFavorito(rs.getBoolean("favorito"));
                 lista.add(libro);
             }
 
@@ -173,7 +174,7 @@ public class LibroDAOImpl implements LibroDAO {
         List<Libro> lista = new ArrayList<>();
         String sql = """
                 SELECT l.id, l.titulo, a.nombre AS autor, c.nombre AS categoria, l.anio, l.stock,
-                       l.autor_id, l.categoria_id
+                       l.autor_id, l.categoria_id, l.favorito
                 FROM libros l
                 INNER JOIN autores a ON l.autor_id = a.id
                 INNER JOIN categorias c ON l.categoria_id = c.id
@@ -191,6 +192,7 @@ public class LibroDAOImpl implements LibroDAO {
                 libro.setCategoriaId(rs.getInt("categoria_id"));
                 libro.setAnio(rs.getInt("anio"));
                 libro.setStock(rs.getInt("stock"));
+                libro.setFavorito(rs.getBoolean("favorito"));
                 lista.add(libro);
             }
 
