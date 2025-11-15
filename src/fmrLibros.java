@@ -131,7 +131,7 @@ public class fmrLibros extends javax.swing.JFrame {
      
     private void cargarTabla() {
         try {
-            modelo.setRowCount(0); // limpiar filas actuales
+            modelo.setRowCount(0);
             List<Libro> alumnos = service.listar();
             for (Libro a : alumnos) {
                 modelo.addRow(new Object[]{a.getId(), a.getTitulo(), a.getAutorId(), a.getAnio(), a.getStock()});
@@ -390,7 +390,7 @@ public class fmrLibros extends javax.swing.JFrame {
         } catch (Exception e) {
             mostrarError(e);
         }
-    }              txtTitulo//GEN-LAST:event_btnGuardarActionPerformed
+    }
  
             
             
